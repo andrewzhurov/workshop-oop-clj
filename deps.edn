@@ -1,1 +1,3 @@
-{:main workshop.core}
+{:main workshop.core
+ :paths ["src" "test"]
+ :deps {matcho {:mvn/version "0.1.0-RC6"}}}
