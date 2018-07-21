@@ -12,8 +12,15 @@
       (recur next-z))))
 
 
-(defn process-channel [channel args]
-  
+(defn process-channel [channel {:keys [do-reverse]}]
+  (let [{items true
+         non false} (group-by #(= :item (:tag %)) channel)]
+    (cond->> items
+      do-reverse reverse
+      :make-whole (concat non))
+    
+    )
+
   #_(cond->
       (contains? (set args) "--reverse") reverse-items)
   #_(-> feed
@@ -40,6 +47,6 @@
   (println "All args:" (pr-str args))
   (->> (slurp path-in)
        parse
-       (process args)
+       (process (set args))
        unparse
        (spit path-out)))
