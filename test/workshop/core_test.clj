@@ -4,7 +4,7 @@
             [matcho.core :refer [match]]))
 
 (def feed
-{:tag :rss,
+  {:tag :rss,
  :attrs {:version "2.0"},
  :content
  [{:tag :channel,
@@ -26,9 +26,7 @@
       {:tag :description,
        :attrs nil,
        :content ["New RSS tutorial on W3Schools"]}
-      {:tag :pubDate,
-       :attrs nil,
-       :content ["Tue, 09 Jul 2018 08:06:45 +0000"]}]}
+      {:tag :pubDate, :attrs nil, :content ["2009-06-09T13:45:30"]}]}
     {:tag :item,
      :attrs nil,
      :content
@@ -40,9 +38,7 @@
       {:tag :description,
        :attrs nil,
        :content ["New RSS tutorial on W3Schools"]}
-      {:tag :pubDate,
-       :attrs nil,
-       :content ["Tue, 08 Jul 2018 08:06:45 +0000"]}]}
+      {:tag :pubDate, :attrs nil, :content ["2009-06-10T13:45:30"]}]}
     {:tag :item,
      :attrs nil,
      :content
@@ -52,7 +48,7 @@
       {:tag :description, :attrs nil, :content ["Feed description 3"]}
       {:tag :pubDate,
        :attrs nil,
-       :content ["Tue, 07 Jul 2018 08:06:45 +0000"]}]}]}]})
+       :content ["2009-06-07T13:45:30"]}]}]}]})
 
 (defn feed-item [id]
   {:tag :item,

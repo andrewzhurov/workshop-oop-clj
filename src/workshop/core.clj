@@ -11,21 +11,19 @@
       next-z
       (recur next-z))))
 
+(defn get-date [item]
+  (some (fn [{:keys [tag content]}]
+          (when (= tag :pubDate) (first content)))
+        (:content item)))
 
-(defn process-channel [channel {:keys [do-reverse]}]
+(defn process-channel [channel {:keys [do-reverse do-sort limit]}]
   (let [{items true
          non false} (group-by #(= :item (:tag %)) channel)]
     (cond->> items
+      do-sort ((fn [i] (reverse (sort-by get-date i))))
       do-reverse reverse
-      :make-whole (concat non))
-    
-    )
-
-  #_(cond->
-      (contains? (set args) "--reverse") reverse-items)
-  #_(-> feed
-      to-channel
-      (zip/edit update :content reverse)))
+      limit (take limit)
+      :make-whole (concat non))))
 
 (defn process [args feed]
   (-> feed

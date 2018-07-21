@@ -10,21 +10,21 @@
     <title>Feed item 1</title>
     <link>https://www.w3schools.com/xml/xml_rss.asp</link>
     <description>New RSS tutorial on W3Schools</description>
-    <pubDate>Tue, 09 Jul 2018 08:06:45 +0000</pubDate>
+    <pubDate>2009-06-09T13:45:30</pubDate>
   </item>
   <item>
     <id>2</id>
     <title>Feed item 2</title>
     <link>https://www.w3schools.com/xml/xml_rss.asp</link>
     <description>New RSS tutorial on W3Schools</description>
-    <pubDate>Tue, 10 Jul 2018 08:06:45 +0000</pubDate>
+    <pubDate>2009-06-10T13:45:30</pubDate>
   </item>
   <item>
     <id>3</id>
     <title>Feed item 3</title>
     <link>https://www.feed3.com</link>
     <description>Feed description 3</description>
-    <pubDate>Tue, 07 Jul 2018 08:06:45 +0000</pubDate> 
+    <pubDate>2009-06-07T13:45:30</pubDate> 
   </item>
 </channel>
 
