@@ -4,10 +4,10 @@
             [clojure.pprint]))
 
 (defn l [desc expr] (println desc expr) expr)
-(defn to-channel [z]
+(defn to-items [z]
   (let [next-z (zip/next z)
         next-node (zip/node next-z)]
-    (if (= (:tag next-node) :channel)
+    (if (#{:channel :feed} (:tag next-node))
       next-z
       (recur next-z))))
 
@@ -16,27 +16,45 @@
           (when (= tag :pubDate) (first content)))
         (:content item)))
 
-(defn process-channel [channel {:keys [do-reverse do-sort limit]}]
+(defn process-items [container {:keys [do-reverse do-sort limit]}]
   (let [{items true
-         non false} (group-by #(= :item (:tag %)) channel)]
+         non false} (group-by #(= :item (:tag %)) container)]
     (cond->> items
       do-sort ((fn [i] (reverse (sort-by get-date i))))
       do-reverse reverse
       limit (take limit)
       :make-whole (concat non))))
 
+(defmulti to-atom :tag) 
+(defmethod to-atom :rss
+  [el]
+  (l "On RSS!!!!" 11)
+  (l "El:" el)
+  (l "Out:" {:tag :feed
+             :content (vec (get-in el [:content 0 :content]))}))
+(defmethod to-atom :default [in] (l "INNN"in))
+
+(defmulti convert-feed (fn [_ to] to))
+(defmethod convert-feed :atom
+  [feed _]
+  (loop [z (l "Z on loop:" (zip/xml-zip (zip/root feed)))]
+    (let [new-z (zip/edit z (fn [x] (l "Node value:" x)) #_to-atom)]
+      (if (zip/end? new-z)
+        new-z
+        (recur (zip/next new-z))))))
+
 (defn process [args feed]
   (-> feed
       zip/xml-zip
 
-      to-channel
-      (zip/edit update :content process-channel args)
+      to-items
+      (zip/edit update :content process-items args)
 
-      zip/root
+      (convert-feed (:convert-to args))
       ))
 
 (defn parse [s]
-  (l "Parsed:" (clojure.pprint/pprint (xml/parse (java.io.ByteArrayInputStream. (.getBytes s))))))
+  (xml/parse (java.io.ByteArrayInputStream. (.getBytes s))))
 
 (defn unparse [feed]
   (with-out-str (xml/emit feed)))
@@ -45,6 +63,7 @@
   (println "All args:" (pr-str args))
   (->> (slurp path-in)
        parse
-       (process (set args))
-       unparse
-       (spit path-out)))
+       (process {:convert-to :atom})
+       ;unparse
+       ;(spit path-out)
+       ))
